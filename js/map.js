@@ -3,6 +3,11 @@
 (function () {
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                  ГЕНЕРАЦИЯ ОБЪЯВЛЕНИЙ И МЕТОК НА КАРТЕ
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
   /* ---------------------------------------------------------------------------
    * Генерирует случайное число в пределах от min до max (включительно)
    *
@@ -200,6 +205,11 @@
       pin.className = 'pin';
       pin.style.left = setOfAds[j].location.x + 'px';
       pin.style.top = setOfAds[j].location.y + 'px';
+      pin.setAttribute('tabindex', 0);
+      pin.setAttribute('data-ad-number', j);
+      pin.addEventListener('click', dialogOpenHandler);
+      pin.addEventListener('keypress', dialogOpenHandler);
+      pin.ads = setOfAds;
 
       var pinAvatar = document.createElement('img');
       pinAvatar.src = setOfAds[j].author.avatar;
@@ -239,28 +249,130 @@
 
 
   /* ---------------------------------------------------------------------------
-   * Создает набор меток для карты по данным объявлений,
-   * преобразовывает его в фрагмент и вставляет в разметку.
-   * Отрисовывает текст выбранного объявления.
+   * Отображает метки на карте
    *
-   * @param {number} - количество объявлений
-   * @param {number} - номер объявления, выводимого в диалоговом окне
+   * @param {Array<Object>} - массив с объектами объявлений
    */
-  function showAds(count, index) {
-    var setOfAds = createSetOfAds(count);
-    var choosedAd = setOfAds[index];
-
-    // Отрисовка меток
+  function showPins(setOfAds) {
     var pinsFragment = createPinsFragment(setOfAds);
     pasteFragment(pinsFragment, '.tokyo__pin-map');
-
-    // Отрисовка текста конкретного объявления
-    var adNode = createAdNode(choosedAd);
-    replaceBlock('.dialog__panel', adNode);
   }
 
 
-  showAds(8, 0);
+  /* ---------------------------------------------------------------------------
+   * Отображает панель dialog
+   *
+   * @param {Object} - объект объявления
+   */
+  function showAdDialog(adObject) {
+    var adNode = createAdNode(adObject);
+    replaceBlock('.dialog__panel', adNode);
+    document.querySelector('.dialog').classList.remove('hidden');
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Инициализирует набор объявлений и соответствующие метки на карте
+   *
+   * @param {number} - количество объявлений
+   */
+  function initializeAds(count) {
+    var setOfAds = createSetOfAds(count);
+    showPins(setOfAds);
+    // Скрытие диалогового окна при запуске
+    document.querySelector('.dialog').classList.add('hidden');
+    // Подписка на закрытие диалогового окна
+    document.querySelector('.dialog__close').addEventListener('click', dialogCloseHandler);
+    document.querySelector('.dialog__close').addEventListener('keydown', dialogCloseHandler);
+    document.querySelector('.tokyo').addEventListener('keydown', dialogCloseHandler);
+  }
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                ВЗАИМОДЕЙСТВИЕ С КАРТОЙ И ОТОБРАЖЕНИЕ ЭЛЕМЕНТОВ
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+  /* ---------------------------------------------------------------------------
+   * Делает конкретную метку на карте активной
+   *
+   * @param {HTMLElement} - элемент-метка
+   */
+  function makePinActive(pin) {
+    pin.classList.add('pin--active');
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Делает все метки на карте неактивными
+   *
+   * @param {NodeList} - набор элементов-меток
+   */
+  function makePinsInactive(pinsNodeList) {
+    [].forEach.call(pinsNodeList, function (pin) {
+      pin.classList.remove('pin--active');
+    });
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Устанавливает логику обработки события открытия окна
+   *
+   * @param {Object} - объект события
+   */
+  function dialogCanOpen(event) {
+    return event.button === 0 || event.keyCode === 13;
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Устанавливает логику обработки события закрытия окна
+   *
+   * @param {Object} - объект события
+   */
+  function dialogCanClose(event) {
+    return event.button === 0 || event.keyCode === 13 || event.keyCode === 27;
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик события открытия диалогового окна
+   *
+   * @param {Object} - объект события
+   */
+  function dialogOpenHandler(event) {
+    var pin = event.currentTarget;
+    var setOfAds = pin.ads;
+    var adNumber = pin.dataset.adNumber;
+    var allPins = pin.parentNode.querySelectorAll('.pin--active');
+
+    if (dialogCanOpen(event)) {
+      makePinsInactive(allPins);
+      makePinActive(pin);
+      showAdDialog(setOfAds[adNumber]);
+    }
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик события закрытия диалогового окна
+   *
+   * @param {Object} - объект события
+   */
+  function dialogCloseHandler(event) {
+    if (dialogCanClose(event)) {
+      document.querySelector('.dialog').classList.add('hidden');
+      document.querySelector('.pin--active').classList.remove('pin--active');
+    }
+  }
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                                  СТАРТ
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+  initializeAds(8);
 
 
 })();
