@@ -272,6 +272,38 @@
 
 
   /* ---------------------------------------------------------------------------
+   * Применяет первоначальные настройки
+   */
+  function applyDefaultSettings() {
+    document.querySelector('.dialog').classList.add('hidden');
+    document.querySelector('#price').min = 1000;
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Подписывает элементы на события
+   */
+  function subscribes() {
+    /* Элементы */
+    var dialogCross = document.querySelector('.dialog__close');
+    var map = document.querySelector('.tokyo');
+    var submit = document.querySelector('.form__submit');
+    var type = document.querySelector('#type');
+    var timein = document.querySelector('#time');
+    var roomNumber = document.querySelector('#room_number');
+
+    /* Подписки */
+    dialogCross.addEventListener('click', dialogCloseHandler);
+    dialogCross.addEventListener('keydown', dialogCloseHandler);
+    map.addEventListener('keydown', dialogCloseHandler);
+    submit.addEventListener('click', submitClickHandler);
+    type.addEventListener('change', typeChangeHandler);
+    timein.addEventListener('change', timeChangeHandler);
+    roomNumber.addEventListener('change', roomsChangeHandler);
+  }
+
+
+  /* ---------------------------------------------------------------------------
    * Инициализирует набор объявлений и соответствующие метки на карте
    *
    * @param {number} - количество объявлений
@@ -279,12 +311,8 @@
   function initializeAds(count) {
     var setOfAds = createSetOfAds(count);
     showPins(setOfAds);
-    // Скрытие диалогового окна при запуске
-    document.querySelector('.dialog').classList.add('hidden');
-    // Подписка на закрытие диалогового окна
-    document.querySelector('.dialog__close').addEventListener('click', dialogCloseHandler);
-    document.querySelector('.dialog__close').addEventListener('keydown', dialogCloseHandler);
-    document.querySelector('.tokyo').addEventListener('keydown', dialogCloseHandler);
+    applyDefaultSettings();
+    subscribes();
   }
 
 
@@ -364,6 +392,97 @@
       document.querySelector('.dialog').classList.add('hidden');
       document.querySelector('.pin--active').classList.remove('pin--active');
     }
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик, выставляющий время выезда равным времени въезда
+   *
+   * @param {Object} - объект события
+   */
+  function timeChangeHandler(event) {
+    var timeout = document.querySelector('#timeout');
+    timeout.selectedIndex = event.target.selectedIndex;
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик, выставляющий минимальную цену в соответствии с типом жилья
+   *
+   * @param {Object} - объект события
+   */
+  function typeChangeHandler(event) {
+    var price = document.querySelector('#price');
+    var minPrices = {
+      'Квартира': 1000,
+      'Лачуга': 0,
+      'Дворец': 10000
+    };
+    price.value = minPrices[event.target.value];
+    price.min = minPrices[event.target.value];
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик, выставляющий кол-во гостей в соответствии с кол-вом комнат
+   *
+   * @param {Object} - объект события
+   */
+  function roomsChangeHandler(event) {
+    var guestsNumber = document.querySelector('#capacity');
+    guestsNumber.selectedIndex = event.target.selectedIndex === 0 ? 1 : 0;
+  }
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                              ВАЛИДАЦИЯ ФОРМЫ
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик события нажатия кнопки "Опубликовать",
+   * запускающий проверку заполнения формы
+   */
+  function submitClickHandler() {
+    if (!isFormValidate()) {
+      event.preventDefault();
+    }
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Окрашивает рамку поля формы в зависимости от валидности
+   *
+   * @param {HTMLElement} - элемент формы
+   * @param {boolean} - условие окраски
+   */
+  function borderPaint(element, condition) {
+    element.style.borderColor = !condition ? '#d9d9d3' : 'red';
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * Обработчик события нажатия кнопки "Опубликовать",
+   * проверяющий правильность заполнения формы
+   *
+   * @param {Object} - объект события
+   */
+  function isFormValidate() {
+    var title = document.querySelector('#title');
+    var price = document.querySelector('#price');
+
+    var invalid = {
+      titleRules: !title.hasAttribute('required') ||
+                  (title.value.length < 30 || title.value.length > 100),
+      priceRules: !price.type === 'number' ||
+                  !price.hasAttribute('required') ||
+                  (price.value < 1000 || price.value > 1000000)
+    };
+
+    borderPaint(title, invalid.titleRules);
+    borderPaint(price, invalid.priceRules);
+
+    return invalid.titleRules || invalid.priceRules;
   }
 
 
