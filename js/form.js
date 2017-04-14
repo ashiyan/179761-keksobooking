@@ -14,7 +14,7 @@ window.publishForm = (function () {
    * @param {HTMLElement} - элемент формы
    */
   function borderPaint(field) {
-    field.style.borderColor = field.checkValidity() ? '#d9d9d3' : 'red';
+    field.style.borderColor = field.checkValidity() ? '#d9d9d3' : '#ff0000';
   }
 
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */

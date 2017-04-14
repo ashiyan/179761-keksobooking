@@ -128,7 +128,7 @@ window.data = (function () {
             address: location.text,
             price: getRandomNumber(10, 10000) * 100,
             type: getType(),
-            rooms: getRandomNumber(1, 100),
+            rooms: getRandomNumber(1, 5),
             guests: getRandomNumber(0, 3),
             checkin: getTime().checkin,
             checkout: getTime().checkout,
