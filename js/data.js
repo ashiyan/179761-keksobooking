@@ -1,5 +1,7 @@
 /* Генерирует и возвращает объект/массив обьявлений с данными */
 
+/* global map */
+
 'use strict';
 
 window.data = (function () {
@@ -89,9 +91,9 @@ window.data = (function () {
    * и текстовым вариантами
    */
   function getLocation() {
-    var xCoord = getRandomNumber(300, 900) + 20;
-    var yCoord = getRandomNumber(100, 500) + 40;
-    var textCoords = xCoord + ', ' + yCoord;
+    var xCoord = getRandomNumber(map.getBorder().left, map.getBorder().right);
+    var yCoord = getRandomNumber(map.getBorder().top, map.getBorder().bottom);
+    var textCoords = (xCoord + 28) + ', ' + (yCoord + 75);
 
     var location = {
       coords: {
