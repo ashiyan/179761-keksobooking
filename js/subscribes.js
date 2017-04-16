@@ -9,7 +9,8 @@ window.subscribes = (function () {
   var element = {
     map: {
       dialogCross: document.querySelector('.dialog__close'),
-      background: document.querySelector('.tokyo')
+      background: document.querySelector('.tokyo'),
+      //mainPinImg: document.querySelector('.pin__main > img')
     },
     form: {
       submit: document.querySelector('.form__submit'),
@@ -17,9 +18,11 @@ window.subscribes = (function () {
       timein: document.querySelector('#time'),
       rooms: document.querySelector('#room_number'),
       title: document.querySelector('#title'),
-      price: document.querySelector('#price')
+      price: document.querySelector('#price'),
+      address: document.querySelector('#address')
     }
   };
+
 
   /* ---------------------------------------------------------------------------
    * Обработчик события открытия карточки
@@ -28,7 +31,7 @@ window.subscribes = (function () {
   function dialogOpenHandler(event) {
     var pressed = {
       mouseLeft: event.button === 0,
-      enter: event.keyCode === 13,
+      enter: event.keyCode === 13
     };
 
     var pin = event.currentTarget;
@@ -103,6 +106,13 @@ window.subscribes = (function () {
     publishForm.validate();
   }
 
+  /* ---------------------------------------------------------------------------
+   * Обработчик события изменения поля "Адрес"
+   */
+  function addressChangeHandler() {
+    publishForm.addressChange();
+  }
+
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */
 
   return {
@@ -120,6 +130,7 @@ window.subscribes = (function () {
       element.form.submit.addEventListener('click', formChangeHandler);
       element.form.title.addEventListener('input', formChangeHandler);
       element.form.price.addEventListener('input', formChangeHandler);
+      element.form.address.addEventListener('input', addressChangeHandler);
     },
 
     /* -------------------------------------------------------------------------

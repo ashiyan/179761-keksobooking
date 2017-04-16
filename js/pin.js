@@ -26,6 +26,7 @@ window.pin = (function () {
     pinAvatar.className = 'rounded';
     pinAvatar.width = '40';
     pinAvatar.height = '40';
+    pinAvatar.setAttribute('draggable', false);
 
     pinNode.appendChild(pinAvatar);
     return pinNode;
