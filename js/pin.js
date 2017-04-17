@@ -1,6 +1,6 @@
 /* Отрисовывает пин */
 
-/* global subscribes */
+/* global subscribes, data */
 
 'use strict';
 
@@ -32,24 +32,53 @@ window.pin = (function () {
     return pinNode;
   }
 
+  /* -------------------------------------------------------------------------
+   * Создает и возвращает DOM-фрагмент, состоящий из меток на карте
+   * @param {Array<Object>} - массив с объектами объявлений
+   * @return {DocumentFragment}
+   */
+  function getPinsFragment(adList) {
+    var fragment = document.createDocumentFragment();
+
+    adList.forEach(function (ad) {
+      var pin = createPinNode(ad);
+      fragment.appendChild(pin);
+    });
+
+    return fragment;
+  }
+
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */
 
   return {
 
-    /* -------------------------------------------------------------------------
-     * Создает и возвращает DOM-фрагмент, состоящий из меток на карте
-     * @param {Array<Object>} - массив с объектами объявлений
-     * @return {DocumentFragment}
+    /* -----------------------------------------------------------------------
+     * Отрисовывает метки всех объявлений на карте
      */
-    getPins: function (adList) {
-      var fragment = document.createDocumentFragment();
+    draw: function () {
+      var ads = data.getAdList();
+      var fragment = getPinsFragment(ads);
+      var map = document.querySelector('.tokyo__pin-map');
+      map.appendChild(fragment);
+    },
 
-      adList.forEach(function (ad) {
-        var pin = createPinNode(ad);
-        fragment.appendChild(pin);
+    /* -----------------------------------------------------------------------
+     * Добавляет метке выделение
+     * @param {HTMLElement} - метка
+     */
+    activate: function (pin) {
+      pin.classList.add('pin--active');
+    },
+
+    /* -----------------------------------------------------------------------
+     * Убирает выделение у всех активных меток
+     */
+    deactivateAll: function () {
+      var map = document.querySelector('.tokyo__pin-map');
+      var activePins = map.querySelectorAll('.pin--active');
+      [].forEach.call(activePins, function (pin) {
+        pin.classList.remove('pin--active');
       });
-
-      return fragment;
     }
 
   };

@@ -92,8 +92,8 @@ window.data = (function () {
    */
   function getLocation() {
     var xCoord = getRandomNumber(map.getBorder().left, map.getBorder().right);
-    var yCoord = getRandomNumber(map.getBorder().top, map.getBorder().bottom);
-    var textCoords = (xCoord + 28) + ', ' + (yCoord + 75);
+    var yCoord = getRandomNumber(map.getBorder().top + 19, map.getBorder().bottom);
+    var textCoords = (xCoord + 28 - 37) + ', ' + (yCoord + 75 - 94);
 
     var location = {
       coords: {
