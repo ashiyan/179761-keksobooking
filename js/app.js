@@ -18,8 +18,6 @@ window.app = (function () {
       data.init(8);
       subscribes.init();
       map.init();
-      map.card.hide();
-      map.pin.draw();
       publishForm.init();
     }
   };

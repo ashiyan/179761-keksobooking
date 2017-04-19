@@ -55,12 +55,6 @@ window.drag = (function () {
       y: drag.startCoords.y + event.clientY - drag.firstClick.y
     };
 
-    /* Координаты для отображения в поле адреса */
-    drag.address = {
-      x: newCoords.x + Math.floor(drag.pin.clientWidth / 2),
-      y: newCoords.y + drag.pin.clientHeight
-    };
-
     /* Запрет выхода метки за пределы карты */
     map.correctPosition(newCoords);
 
@@ -70,7 +64,7 @@ window.drag = (function () {
 
     /* Отображение координат в строке адреса */
     var addressField = document.querySelector('#address');
-    addressField.value = 'x: ' + drag.address.x + ', y: ' + drag.address.y;
+    addressField.value = 'x: ' + newCoords.x + ', y: ' + newCoords.y;
   }
 
   /* ---------------------------------------------------------------------------

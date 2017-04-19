@@ -1,6 +1,6 @@
 /* Работает с картой */
 
-/* global data, pin, card, drag */
+/* global pin, drag, card */
 
 'use strict';
 
@@ -13,15 +13,19 @@ window.map = (function () {
     left: 300
   };
 
-  var element = {
-    map: document.querySelector('.tokyo__pin-map'),
-    card: document.querySelector('.dialog'),
-    mainPin: document.querySelector('.pin__main')
-  };
-
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */
 
   return {
+
+    /* -------------------------------------------------------------------------
+     * Инициализирует начальные настройки карты
+     */
+    init: function () {
+      var mainPin = document.querySelector('.pin__main');
+      card.hideCard();
+      pin.draw();
+      drag.makeDraggable(mainPin);
+    },
 
     /* -------------------------------------------------------------------------
      * Возвращает границы карты
@@ -31,76 +35,12 @@ window.map = (function () {
     },
 
     /* -------------------------------------------------------------------------
-     * Инициализирует начальные настройки карты
+     * Перемещает главный пин в указанные координаты
      */
-    init: function () {
-      drag.makeDraggable(element.mainPin);
-    },
-
-    pin: {
-
-      /* -----------------------------------------------------------------------
-       * Отрисовывает метки на карте
-       */
-      draw: function () {
-        var ads = data.getAdList();
-        var pins = pin.getPins(ads);
-        element.map.appendChild(pins);
-      },
-
-      /* -----------------------------------------------------------------------
-       * Добавляет метке выделение
-       * @param {HTMLElement} - метка
-       */
-      activate: function (pin) {
-        pin.classList.add('pin--active');
-      },
-
-      /* -----------------------------------------------------------------------
-       * Убирает выделение у всех активных меток
-       */
-      deactivate: function () {
-        var activePins = element.map.querySelectorAll('.pin--active');
-        [].forEach.call(activePins, function (pin) {
-          pin.classList.remove('pin--active');
-        });
-      },
-
-      /* -----------------------------------------------------------------------
-       * Перемещает главный пин в указанные координаты
-       */
-      setMainPinPosition: function (x, y) {
-        element.mainPin.style.left = x + 'px';
-        element.mainPin.style.top = y + 'px';
-      },
-    },
-
-    card: {
-
-      /* -----------------------------------------------------------------------
-       * Отрисовывает карточку обьявления
-       * @param {Object} - объект обьявления
-       */
-      draw: function (ad) {
-        var newCard = card.getCard(ad);
-        var oldCard = document.querySelector('.dialog__panel');
-        var cardParent = oldCard.parentNode;
-        cardParent.replaceChild(newCard, oldCard);
-      },
-
-      /* -----------------------------------------------------------------------
-       * Показывает карточку
-       */
-      show: function () {
-        element.card.classList.remove('hidden');
-      },
-
-      /* -----------------------------------------------------------------------
-       * Скрывает карточку
-       */
-      hide: function () {
-        element.card.classList.add('hidden');
-      }
+    setMainPinPosition: function (x, y) {
+      var mainPin = document.querySelector('.pin__main');
+      mainPin.style.left = x + 'px';
+      mainPin.style.top = y + 'px';
     },
 
     /* -------------------------------------------------------------------------
