@@ -1,4 +1,4 @@
-/* Отрисовывает пин */
+/* Draws a pin */
 
 /* global subscribes, data */
 
@@ -7,8 +7,8 @@
 window.pin = (function () {
 
   /* ---------------------------------------------------------------------------
-   * Создает и возвращает узел метки на карте
-   * @param {Object} - объект объявления
+   * Creates and returns a pin node
+   * @param {Object} - ad's object
    * @return {HTMLElement}
    */
   function createPinNode(ad) {
@@ -18,7 +18,6 @@ window.pin = (function () {
     pinNode.style.left = ad.location.x + 'px';
     pinNode.style.top = ad.location.y + 'px';
     pinNode.setAttribute('tabindex', 0);
-    pinNode.setAttribute('data-ad-id', ad.id);
     subscribes.toDialogOpenHandler(pinNode);
 
     var pinAvatar = document.createElement('img');
@@ -32,9 +31,9 @@ window.pin = (function () {
     return pinNode;
   }
 
-  /* -------------------------------------------------------------------------
-   * Создает и возвращает DOM-фрагмент, состоящий из меток на карте
-   * @param {Array<Object>} - массив с объектами объявлений
+  /* ---------------------------------------------------------------------------
+   * Creates and returns a DOM fragment consisting of pins
+   * @param {Array<Object>} - array with ad's objects
    * @return {DocumentFragment}
    */
   function getPinsFragment(adList) {
@@ -52,8 +51,8 @@ window.pin = (function () {
 
   return {
 
-    /* -----------------------------------------------------------------------
-     * Отрисовывает метки всех объявлений на карте
+    /* -------------------------------------------------------------------------
+     * Draws the pins of all ads
      */
     draw: function () {
       var ads = data.getAdList();
@@ -62,16 +61,16 @@ window.pin = (function () {
       map.appendChild(fragment);
     },
 
-    /* -----------------------------------------------------------------------
-     * Добавляет метке выделение
-     * @param {HTMLElement} - метка
+    /* -------------------------------------------------------------------------
+     * Adds a selection to the pin
+     * @param {HTMLElement} - pin
      */
     activate: function (pin) {
       pin.classList.add('pin--active');
     },
 
-    /* -----------------------------------------------------------------------
-     * Убирает выделение у всех активных меток
+    /* -------------------------------------------------------------------------
+     * Removes selection from all active pins
      */
     deactivateAll: function () {
       var map = document.querySelector('.tokyo__pin-map');
