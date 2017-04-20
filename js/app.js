@@ -1,4 +1,4 @@
-/* Инициализирует другие модули */
+/* Initializes other modules */
 
 /* global app, data, subscribes, map, publishForm */
 
@@ -12,10 +12,10 @@ window.app = (function () {
   return {
 
     /* -------------------------------------------------------------------------
-     * Инициализирует модули приложения
+     * Initializes application modules
      */
     init: function () {
-      data.init(8);
+      data.init();
       subscribes.init();
       map.init();
       publishForm.init();
@@ -24,5 +24,5 @@ window.app = (function () {
 
 })();
 
-/* Запуск инициализации */
+/* Starting initialization */
 app.init();

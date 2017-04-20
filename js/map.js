@@ -1,6 +1,6 @@
-/* Работает с картой */
+/* Works with map */
 
-/* global pin, drag, card */
+/* global drag, card */
 
 'use strict';
 
@@ -18,24 +18,26 @@ window.map = (function () {
   return {
 
     /* -------------------------------------------------------------------------
-     * Инициализирует начальные настройки карты
+     * Initializes start map's settings
      */
     init: function () {
       var mainPin = document.querySelector('.pin__main');
       card.hideCard();
-      pin.draw();
       drag.makeDraggable(mainPin);
     },
 
     /* -------------------------------------------------------------------------
-     * Возвращает границы карты
+     * Returns the object of map's borders
+     * @return {Object}
      */
     getBorder: function () {
       return border;
     },
 
     /* -------------------------------------------------------------------------
-     * Перемещает главный пин в указанные координаты
+     * Moves the main pin to the specified coordinates
+     * @param {number} - x coord
+     * @param {number} - y coord
      */
     setMainPinPosition: function (x, y) {
       var mainPin = document.querySelector('.pin__main');
@@ -44,8 +46,8 @@ window.map = (function () {
     },
 
     /* -------------------------------------------------------------------------
-     * Ограничивает выход метки за области карты
-     * @param {Object} - объект с координатами метки
+     * Limits the pin output beyond the map area
+     * @param {Object} - object with coordinates
      */
     correctPosition: function (coords) {
       var borderLimit = {

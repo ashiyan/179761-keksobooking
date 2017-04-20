@@ -1,4 +1,4 @@
-/* Отрисовывает элементы на карточке */
+/* Draws elements on the card */
 
 /* global data */
 
@@ -7,8 +7,9 @@
 window.card = (function () {
 
   /* ---------------------------------------------------------------------------
-   * Создает и возвращает DOM-фрагмент с удобствами
-   * @param {Object} - объект объявления
+   * Creates and returns a DOM-fragment with features
+   * @param {Object} - ad object
+   * @return {DocumentFragment}
    */
   function createFeaturesNode(adObject) {
     var fragment = document.createDocumentFragment();
@@ -22,8 +23,9 @@ window.card = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Создает и возвращает DOM-фрагмент карточки объявления
-   * @param {Object} - объект объявления
+   * Creates and returns a DOM fragment of the ad card
+   * @param {Object} - ad object
+   * @return {HTMLElement}
    */
   function getCard(adObject) {
     var template = document.querySelector('#lodge-template').content.cloneNode(true);
@@ -60,11 +62,11 @@ window.card = (function () {
   return {
 
     /* -------------------------------------------------------------------------
-     * Показывает карточку жилья по нажатию на метку на карте
-     * @param {number} - ID объявления
+     * Displays the lodge card by clicking on the map pin
+     * @param {Object} - object with pin coords
      */
-    showCard: function (id) {
-      var adObject = data.getAd(id);
+    showCard: function (pinLocation) {
+      var adObject = data.getAdByLocation(pinLocation);
       var newCard = getCard(adObject);
 
       var oldCard = document.querySelector('.dialog__panel');
@@ -77,7 +79,7 @@ window.card = (function () {
     },
 
     /* -----------------------------------------------------------------------
-     * Скрывает карточку
+     * Hide the lodge card
      */
     hideCard: function () {
       var cardBoard = document.querySelector('.dialog');

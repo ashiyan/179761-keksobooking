@@ -1,4 +1,4 @@
-/* Работает с формой объявления */
+/* Works with form */
 
 /* global map */
 
@@ -13,8 +13,8 @@ window.publishForm = (function () {
   };
 
   /* ---------------------------------------------------------------------------
-   * Окрашивает рамку поля формы в зависимости от валидности
-   * @param {HTMLElement} - элемент формы
+   * Paints the field's border depending on the validity
+   * @param {HTMLElement} - form's element
    */
   function borderPaint(field) {
     field.style.borderColor = field.checkValidity() ? '#d9d9d3' : '#f00';
@@ -25,14 +25,14 @@ window.publishForm = (function () {
   return {
 
     /* -------------------------------------------------------------------------
-     * Инициализирует начальные настройки для полей
+     * Initializes start settings for fields
      */
     init: function () {
       element.price.min = 1000;
     },
 
     /* -------------------------------------------------------------------------
-     * Применяет настройки к полям в зависимости от их валидности
+     * Applies the settings to the fields depending on their validity
      */
     validate: function () {
       borderPaint(element.title);
@@ -40,31 +40,32 @@ window.publishForm = (function () {
     },
 
     /* -------------------------------------------------------------------------
-     * Вписывает координаты в поле "Адрес" и позволяет их редактировать
+     * Enter coordinates in the "Address" field and allow them to edit
      */
     addressChange: function () {
-      /* Получаем массив координат x и y из строки адреса */
+      /* Get an array with x and y coordinates from the address field */
       var inputCoords = element.address.value.match(/(\d+)/g);
 
       if (inputCoords === null || inputCoords.length !== 2) {
-        /* Если массив координат пуст или в нем не 2 координаты - ошибка */
+        /* If the coordinate array is empty or
+           there are not 2 coordinates in it - it's error */
         element.address.setCustomValidity('Неверный формат.');
         element.address.reportValidity();
       } else {
-        /* Если нет - убираем ошибку, сохраняем координаты в объект... */
+        /* If not - remove the error and save the coordinates in the object.. */
         element.address.setCustomValidity('');
         var coords = {
           x: inputCoords[0],
           y: inputCoords[1]
         };
-        /* ...и передаем для корректировки (если есть выход за границы) */
+        /* ...and pass it for correction (if there is a border crossing) */
         map.correctPosition(coords);
-        /* При потере полем фокуса, исправляем неправильные координаты */
+        /* If the focus field is lost, correcting the invalid coordinates */
         element.address.addEventListener('blur', function () {
           element.address.value = 'x: ' + coords.x + ', y: ' + coords.y;
         });
-        /* Меняем местоположение метки по заданным координатам */
-        map.pin.setMainPinPosition(coords.x, coords.y);
+        /* Change the location of the pin according to coordinates */
+        map.setMainPinPosition(coords.x, coords.y);
       }
     }
 

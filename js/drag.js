@@ -1,4 +1,4 @@
-/* Drag and drop контроллер */
+/* Drag and drop controller */
 
 /* global map */
 
@@ -9,11 +9,11 @@ window.drag = (function () {
   var drag = {};
 
   /* ---------------------------------------------------------------------------
-   * Начало процесса перетаскивания (клик по объекту)
-   * @param {Object} - объект события
+   * Start the drag and drop process (click on the object)
+   * @param {Object} - event object
    */
   function startDrag(event) {
-    /* Отмена события при нажатии средней или правой кнопки мыши */
+    /* Cancel event by pressing the middle or right mouse button */
     var pressed = {
       mouseMiddle: event.button === 1,
       mouseRight: event.button === 2
@@ -22,19 +22,19 @@ window.drag = (function () {
       return;
     }
 
-    /* Перетаскиваемая метка становится выше других меток */
+    /* Dragged pin must be above other pins */
     drag.pin.style.zIndex = '999';
 
-    /* Запрет выделения текста на время перетаскивания */
+    /* Prevent text selection while dragging */
     document.body.style.userSelect = 'none';
 
-    /* Запомнить начальную позицию метки */
+    /* Remember the starting position of the pin */
     drag.startCoords = {
       x: drag.pin.offsetLeft,
       y: drag.pin.offsetTop
     };
 
-    /* Запомнить координаты курсора мышки в момент клика */
+    /* Remember the coordinates of the mouse cursor at the first click moment */
     drag.firstClick = {
       x: event.clientX,
       y: event.clientY
@@ -45,31 +45,31 @@ window.drag = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Процесс перетаскивания (движение мыши с зажатой кнопкой)
-   * @param {Object} - объект события
+   * The process of dragging (moving the mouse with the hold button)
+   * @param {Object} - event object
    */
   function processDrag(event) {
-    /* Координаты метки в процессе драга с корректировкой на курсор */
+    /* The pin's coordinates in the drag process */
     var newCoords = {
       x: drag.startCoords.x + event.clientX - drag.firstClick.x,
       y: drag.startCoords.y + event.clientY - drag.firstClick.y
     };
 
-    /* Запрет выхода метки за пределы карты */
+    /* Prevent pin leaves the map */
     map.correctPosition(newCoords);
 
-    /* Применить координаты к метке */
+    /* Apply coordinates to the pin */
     drag.pin.style.left = newCoords.x + 'px';
     drag.pin.style.top = newCoords.y + 'px';
 
-    /* Отображение координат в строке адреса */
+    /* Display pin's coordinates in the address field */
     var addressField = document.querySelector('#address');
     addressField.value = 'x: ' + newCoords.x + ', y: ' + newCoords.y;
   }
 
   /* ---------------------------------------------------------------------------
-   * Окончание процесса перетаскивания (отпускание кнопки мыши)
-   * @param {Object} - объект события
+   * End of the drag and drop process (releasing the mouse button)
+   * @param {Object} - event object
    */
   function endDrag(event) {
     drag.pin.style.zIndex = 'auto';
@@ -82,7 +82,7 @@ window.drag = (function () {
   return {
 
     /* -------------------------------------------------------------------------
-     * Дает метке возможность перетаскивания
+     * Gives the ability to drag and drop
      */
     makeDraggable: function (pin) {
       drag.pin = pin;

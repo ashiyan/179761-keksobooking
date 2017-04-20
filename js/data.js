@@ -1,6 +1,6 @@
-/* Генерирует и возвращает объект/массив обьявлений с данными */
+/* Generates and returns a single object or array of ads data */
 
-/* global map */
+/* global map, pin */
 
 'use strict';
 
@@ -24,9 +24,10 @@ window.data = (function () {
   };
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает случайное число в заданном диапазоне
-   * @param {number} - минимальное значение
-   * @param {number} - максимальное значение
+   * Generates and returns a random number in a range
+   * @param {number} - min value
+   * @param {number} - max value
+   * @return {number}
    */
   function getRandomNumber(min, max) {
     var number = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -34,8 +35,9 @@ window.data = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает путь к аватарке объявления по его индексу
-   * @param {number} - индекс объявления
+   * Generates and returns the path to the ad's avatar through ad's index
+   * @param {number} - ad's index
+   * @return {string}
    */
   function getAvatarSrc(index) {
     var src = 'img/avatars/user0' + (index + 1) + '.png';
@@ -43,8 +45,9 @@ window.data = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает заголовок объявления по его индексу
-   * @param {number} - индекс объявления
+   * Generates and returns the ad's title by ad's index
+   * @param {number} - ad's index
+   * @return {string}
    */
   function getTitle(index) {
     var title = information.title[index];
@@ -52,7 +55,8 @@ window.data = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает объект с типами жилья на разных языках
+   * Generates and returns an object with lodge types in EN & RU languages
+   * @return {Object}
    */
   function getType() {
     var randomIndex = getRandomNumber(0, 2);
@@ -64,7 +68,8 @@ window.data = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает объект с временем заезда и выезда
+   * Generates and returns an object with the time of arrival and departure
+   * @return {Object}
    */
   function getTime() {
     var time = {
@@ -75,7 +80,8 @@ window.data = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает массив с перечислением удобств
+   * Generates and returns an array with a list of features
+   * @return {Array<string>}
    */
   function getFeatures() {
     var features;
@@ -87,8 +93,8 @@ window.data = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Генерирует и возвращает обьект местоположения жилья с координатным
-   * и текстовым вариантами
+   * Generates and returns a location object with coordinates and a text string
+   * @return {Object}
    */
   function getLocation() {
     var xCoord = getRandomNumber(map.getBorder().left, map.getBorder().right);
@@ -106,54 +112,103 @@ window.data = (function () {
     return location;
   }
 
+  /* ---------------------------------------------------------------------------
+   * Generates random ad's data
+   */
+  function generateRandomData() {
+    for (var i = 0; i < 8; i++) {
+      var location = getLocation();
+
+      adList[i] = {
+        author: {
+          avatar: getAvatarSrc(i)
+        },
+
+        offer: {
+          title: getTitle(i),
+          address: location.text,
+          price: getRandomNumber(10, 10000) * 100,
+          type: getType(),
+          rooms: getRandomNumber(1, 5),
+          guests: getRandomNumber(0, 3),
+          checkin: getTime().checkin,
+          checkout: getTime().checkout,
+          features: getFeatures(),
+          description: '',
+          photos: []
+        },
+
+        location: location.coords
+      };
+    }
+  }
+
+  /* ---------------------------------------------------------------------------
+   * Processes the response from the server
+   * @param {Object} - event object
+   */
+  function getAnswerHandler(event) {
+    /* Waiting for a response from the server */
+    if (event.target.readyState === 4) {
+      var map = document.querySelector('.tokyo');
+      var message = '';
+
+      switch (event.target.status) {
+        case 200:
+          /* If the query is successful, save the data and draw the pins */
+          message = 'Данные успешно получены!';
+          adList = JSON.parse(event.target.responseText);
+          break;
+        default:
+          /* With any error, generate random data for drawing */
+          message = 'Сервер не отвечает, данные сформированы случайным образом.';
+          generateRandomData();
+      }
+
+      window.popup(map, message);
+      pin.draw();
+    }
+  }
+
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */
 
   return {
 
     /* -------------------------------------------------------------------------
-     * Инициализирует массив нужной величины с объектами обьявлений
-     * @param {number} - количество обьявлений
+     * Make a request to the server to get the initial data
      */
-    init: function (count) {
-      for (var i = 0; i < count; i++) {
-        var location = getLocation();
-
-        adList[i] = {
-          id: i,
-
-          author: {
-            avatar: getAvatarSrc(i)
-          },
-
-          offer: {
-            title: getTitle(i),
-            address: location.text,
-            price: getRandomNumber(10, 10000) * 100,
-            type: getType(),
-            rooms: getRandomNumber(1, 5),
-            guests: getRandomNumber(0, 3),
-            checkin: getTime().checkin,
-            checkout: getTime().checkout,
-            features: getFeatures(),
-            description: '',
-            photos: []
-          },
-
-          location: location.coords
-        };
-      }
+    init: function () {
+      var requestUrl = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+      window.load(requestUrl, getAnswerHandler);
     },
 
     /* -------------------------------------------------------------------------
-     * Возвращает объект обьявления по индексу
-     * @param {number} - индекс обьявления
+     * Returns the ad object by his index
+     * @param {number} - ad's index
+     * @return {Object}
      */
     getAd: function (index) {
       return adList[index];
     },
 
     /* -------------------------------------------------------------------------
-     * Возвращает массив с объектами обьявлений
+     * Returns the ad object by coords
+     * @param {number} - object with coords
+     * @return {Object}
+     */
+    getAdByLocation: function (coords) {
+      var result = {};
+      adList.forEach(function (ad) {
+        if (ad.location.x === coords.x && ad.location.y === coords.y) {
+          result = ad;
+        }
+      });
+      return result;
+    },
+
+    /* -------------------------------------------------------------------------
+     * Returns an array with the ad objects
+     * @return {Array<Object>}
      */
     getAdList: function () {
       return adList;

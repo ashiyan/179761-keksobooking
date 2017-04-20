@@ -1,4 +1,4 @@
-/* Подписывает элементы на события */
+/* Subscribes elements on events */
 
 /* global pin, card, publishForm */
 
@@ -24,13 +24,15 @@ window.subscribes = (function () {
   };
 
   /* ---------------------------------------------------------------------------
-   * Обработчик события открытия карточки
-   * @param {Object} - объект события
+   * Card opening event handler
+   * @param {Object} - event object
    */
   function dialogOpenHandler(event) {
     var clickedPin = event.currentTarget;
-    var id = clickedPin.dataset.adId;
-
+    var location = {
+      x: clickedPin.offsetLeft,
+      y: clickedPin.offsetTop
+    };
     var pressed = {
       mouseLeft: event.button === 0,
       enter: event.keyCode === 13
@@ -39,13 +41,13 @@ window.subscribes = (function () {
     if (pressed.mouseLeft || pressed.enter) {
       pin.deactivateAll();
       pin.activate(clickedPin);
-      card.showCard(id);
+      card.showCard(location);
     }
   }
 
   /* ---------------------------------------------------------------------------
-   * Обработчик события закрытия карточки
-   * @param {Object} - объект события
+   * Card close Event Handler
+   * @param {Object} - event object
    */
   function dialogCloseHandler(event) {
     var pressed = {
@@ -61,8 +63,8 @@ window.subscribes = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Обработчик, синхронизирующий поля времени заезда и выезда
-   * @param {Object} - объект события
+   * Handler synchronizing the timein and timeout fields
+   * @param {Object} - event object
    */
   function timeChangeHandler(event) {
     var inTimes = ['После 12', 'После 13', 'После 14'];
@@ -77,8 +79,8 @@ window.subscribes = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Обработчик, выставляющий минимальную цену в соответствии с типом жилья
-   * @param {Object} - объект события
+   * Handler sets the minimum price in accordance with the type of lodge
+   * @param {Object} - event object
    */
   function typeChangeHandler(event) {
     var types = ['Квартира', 'Лачуга', 'Дворец'];
@@ -94,8 +96,8 @@ window.subscribes = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Обработчик, выставляющий кол-во гостей в соответствии с кол-вом комнат
-   * @param {Object} - объект события
+   * Handler sets the number of guests in accordance with the rooms count
+   * @param {Object} - event object
    */
   function roomsChangeHandler(event) {
     var count = ['1 комната', '2 комнаты', '100 комнат'];
@@ -110,15 +112,14 @@ window.subscribes = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Обработчик события нажатия кнопки "Опубликовать",
-   * запускающий проверку заполнения формы
+   * Handler starts checking form validity by submit button press
    */
   function formChangeHandler() {
     publishForm.validate();
   }
 
   /* ---------------------------------------------------------------------------
-   * Обработчик события изменения поля "Адрес"
+   * Handler of the "Address" field changing
    */
   function addressChangeHandler() {
     publishForm.addressChange();
@@ -129,7 +130,7 @@ window.subscribes = (function () {
   return {
 
     /* -------------------------------------------------------------------------
-     * Инициализирует подписки на события
+     * Initializes event subscriptions
      */
     init: function () {
       document.body.addEventListener('keydown', dialogCloseHandler);
@@ -145,8 +146,8 @@ window.subscribes = (function () {
     },
 
     /* -------------------------------------------------------------------------
-     * Подписывает элемент на событие открытия карточки
-     * @param {HTMLElement} - подписываемый элемент
+     * Subscribes the item for the card opening event
+     * @param {HTMLElement} - subscribed item
      */
     toDialogOpenHandler: function (elem) {
       elem.addEventListener('click', dialogOpenHandler);
