@@ -10,38 +10,39 @@
 
   window.popup = function (parentNode, messageText) {
     var message = document.createElement('div');
+    var style = message.style;
 
     /* Content and class */
     message.innerHTML = messageText;
     message.className = 'popup';
 
     /* Positioning and dimensions */
-    message.style.position = 'absolute';
-    message.style.top = '25px';
-    message.style.left = '25px';
-    message.style.maxWidth = '350px';
-    message.style.minWidth = '150px';
-    message.style.height = 'auto';
-    message.style.zIndex = '999';
+    style.position = 'absolute';
+    style.top = '25px';
+    style.left = '25px';
+    style.maxWidth = '350px';
+    style.minWidth = '150px';
+    style.height = 'auto';
+    style.zIndex = '999';
 
     /* Behavior */
-    message.style.opacity = '0';
-    message.style.transition = 'opacity 300ms linear';
-    message.style.userSelect = 'none';
-    message.style.cursor = 'default';
+    style.opacity = '0';
+    style.transition = 'opacity 300ms linear';
+    style.userSelect = 'none';
+    style.cursor = 'default';
 
     /* Indents */
-    message.style.padding = '10px';
+    style.padding = '10px';
 
     /* Border */
-    message.style.borderLeft = '5px solid #ff6d51';
+    style.borderLeft = '5px solid #ff6d51';
 
     /* Colors */
-    message.style.background = '#fff';
+    style.background = '#fff';
 
     /* Text */
-    message.style.fontWeight = 'bold';
-    message.style.fontSize = '12px';
+    style.fontWeight = 'bold';
+    style.fontSize = '12px';
 
     /* Inserting an element into the markup */
     parentNode.appendChild(message);
