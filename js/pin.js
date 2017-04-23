@@ -1,10 +1,12 @@
 /* Draws a pin */
 
-/* global subscribes, data */
+/* global subscribes, data, card */
 
 'use strict';
 
 window.pin = (function () {
+
+  var pinList = [];
 
   /* ---------------------------------------------------------------------------
    * Creates and returns a pin node
@@ -14,7 +16,7 @@ window.pin = (function () {
   function createPinNode(ad) {
     var pinNode = document.createElement('div');
 
-    pinNode.className = 'pin';
+    pinNode.className = 'pin pin__other';
     pinNode.style.left = ad.location.x + 'px';
     pinNode.style.top = ad.location.y + 'px';
     pinNode.setAttribute('tabindex', 0);
@@ -28,6 +30,8 @@ window.pin = (function () {
     pinAvatar.setAttribute('draggable', false);
 
     pinNode.appendChild(pinAvatar);
+    pinList.push(pinNode);
+
     return pinNode;
   }
 
@@ -78,6 +82,22 @@ window.pin = (function () {
       [].forEach.call(activePins, function (pin) {
         pin.classList.remove('pin--active');
       });
+    },
+
+    /* -------------------------------------------------------------------------
+     * Apply filter to pins
+     * @param {Array<boolean>} - show/hide conditions
+     */
+    applyFilter: function (isShow) {
+      [].forEach.call(pinList, function (pin) {
+        pin.classList.add('hidden');
+      });
+      for (var i = 0; i < pinList.length; i++) {
+        if (isShow[i]) {
+          pinList[i].classList.remove('hidden');
+        }
+      }
+      card.hideCard();
     }
 
   };

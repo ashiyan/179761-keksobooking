@@ -1,6 +1,6 @@
 /* Subscribes elements on events */
 
-/* global pin, card, publishForm */
+/* global data, pin, card, publishForm */
 
 'use strict';
 
@@ -8,7 +8,8 @@ window.subscribes = (function () {
 
   var element = {
     map: {
-      dialogCross: document.querySelector('.dialog__close')
+      dialogCross: document.querySelector('.dialog__close'),
+      filters: document.querySelector('.tokyo__filters')
     },
     form: {
       submit: document.querySelector('.form__submit'),
@@ -119,10 +120,33 @@ window.subscribes = (function () {
   }
 
   /* ---------------------------------------------------------------------------
-   * Handler of the "Address" field changing
+   * Handler of the filters changing
    */
   function addressChangeHandler() {
     publishForm.addressChange();
+  }
+
+  function selectChangeHandler(event) {
+    var selects = event.currentTarget.querySelectorAll('select');
+    var selectsValues = [];
+    [].forEach.call(selects, function (select) {
+      if (select.value !== 'any') {
+        selectsValues[select.name] = select.value;
+      }
+    });
+
+    var checkboxes = event.currentTarget.querySelectorAll('input');
+    var checkboxesValues = [];
+    [].forEach.call(checkboxes, function (checkbox) {
+      if (checkbox.checked) {
+        checkboxesValues.push(checkbox.value);
+      }
+    });
+
+    var filters = data.filterProcess(selectsValues, checkboxesValues);
+    window.debounce(function () {
+      pin.applyFilter(filters);
+    });
   }
 
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */
@@ -136,6 +160,7 @@ window.subscribes = (function () {
       document.body.addEventListener('keydown', dialogCloseHandler);
       element.map.dialogCross.addEventListener('click', dialogCloseHandler);
       element.map.dialogCross.addEventListener('keydown', dialogCloseHandler);
+      element.map.filters.addEventListener('change', selectChangeHandler);
       element.form.type.addEventListener('change', typeChangeHandler);
       element.form.timein.addEventListener('change', timeChangeHandler);
       element.form.rooms.addEventListener('change', roomsChangeHandler);
