@@ -42,10 +42,16 @@ window.card = (function () {
     };
     var featuresList = createFeaturesNode(adObject);
 
+    var rusType = {
+      'flat': 'Квартира',
+      'house': 'Дом',
+      'bungalo': 'Бунгало'
+    };
+
     tempElements.title.textContent = adObject.offer.title;
     tempElements.address.textContent = adObject.offer.address;
     tempElements.price.innerHTML = adObject.offer.price + '&#x20bd;/ночь';
-    tempElements.type.textContent = adObject.offer.type.ru;
+    tempElements.type.textContent = rusType[adObject.offer.type];
     tempElements.roomsAndGuests.textContent = 'Для ' + adObject.offer.guests +
       ' гостей в ' + adObject.offer.rooms + ' комнатах';
     tempElements.time.textContent = 'Заезд после ' + adObject.offer.checkin +

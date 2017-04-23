@@ -15,10 +15,7 @@ window.data = (function () {
       'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
       'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
     ],
-    type: {
-      en: ['flat', 'house', 'bungalo'],
-      ru: ['Квартира', 'Дом', 'Бунгало']
-    },
+    type: ['flat', 'house', 'bungalo'],
     features: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator',
       'conditioner']
   };
@@ -60,10 +57,7 @@ window.data = (function () {
    */
   function getType() {
     var randomIndex = getRandomNumber(0, 2);
-    var type = {
-      en: information.type.en[randomIndex],
-      ru: information.type.ru[randomIndex]
-    };
+    var type = information.type[randomIndex];
     return type;
   }
 
@@ -127,7 +121,7 @@ window.data = (function () {
         offer: {
           title: getTitle(i),
           address: location.text,
-          price: getRandomNumber(10, 10000) * 100,
+          price: getRandomNumber(10, 1000) * 100,
           type: getType(),
           rooms: getRandomNumber(1, 5),
           guests: getRandomNumber(0, 3),
@@ -212,6 +206,66 @@ window.data = (function () {
      */
     getAdList: function () {
       return adList;
+    },
+
+    /* -------------------------------------------------------------------------
+     * Get information of selected filters and returns result for showing pins
+     * @param {Array<Object>} - selected options list
+     * @param {Array<string>} - names of checked features
+     * @return {Array<boolean>}
+     */
+    filterProcess: function (selects, checkboxes) {
+      var filterResult = [];
+
+      function isOff(feature) {
+        return feature === false;
+      }
+
+      function priceToString(price) {
+        switch (true) {
+          case price < 10000:
+            return 'low';
+          case price < 50000:
+            return 'middle';
+          default:
+            return 'high';
+        }
+      }
+
+      adList.forEach(function (ad) {
+        var allOptionsIsAny = Object.keys(selects).length === 0;
+        var allCheckboxesUncheked = checkboxes.every(isOff);
+
+        if (allOptionsIsAny && allCheckboxesUncheked) {
+          filterResult.push(true);
+        } else {
+          var isSelectsPass = true;
+          var adOptions = [];
+          adOptions['housing_type'] = ad.offer.type;
+          adOptions['housing_price'] = priceToString(ad.offer.price);
+          adOptions['housing_room-number'] = ad.offer.rooms.toString();
+          adOptions['housing_guests-number'] = ad.offer.guests.toString();
+
+          for (var property in selects) {
+            if (adOptions[property] !== selects[property]) {
+              isSelectsPass = false;
+            }
+          }
+
+          var isCheckboxesPass = true;
+          var adFeatures = ad.offer.features.slice();
+
+          checkboxes.forEach(function (feature) {
+            if (!adFeatures.includes(feature)) {
+              isCheckboxesPass = false;
+            }
+          });
+
+          filterResult.push(isSelectsPass && isCheckboxesPass);
+        }
+      });
+
+      return filterResult;
     }
 
   };
