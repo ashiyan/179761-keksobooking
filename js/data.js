@@ -1,7 +1,5 @@
 /* Generates and returns a single object or array of ads data */
 
-/* global map, pin */
-
 'use strict';
 
 window.data = (function () {
@@ -91,8 +89,8 @@ window.data = (function () {
    * @return {Object}
    */
   function getLocation() {
-    var xCoord = getRandomNumber(map.getBorder().left, map.getBorder().right);
-    var yCoord = getRandomNumber(map.getBorder().top + 19, map.getBorder().bottom);
+    var xCoord = getRandomNumber(window.map.getBorder().left, window.map.getBorder().right);
+    var yCoord = getRandomNumber(window.map.getBorder().top + 19, window.map.getBorder().bottom);
     var textCoords = (xCoord + 28 - 37) + ', ' + (yCoord + 75 - 94);
 
     var location = {
@@ -160,7 +158,7 @@ window.data = (function () {
       }
 
       window.popup(map, message);
-      pin.draw();
+      window.pin.draw();
     }
   }
 
@@ -182,7 +180,8 @@ window.data = (function () {
      * @return {Object}
      */
     getAd: function (index) {
-      return adList[index];
+      var tempList = adList.slice();
+      return tempList[index];
     },
 
     /* -------------------------------------------------------------------------
@@ -192,7 +191,8 @@ window.data = (function () {
      */
     getAdByLocation: function (coords) {
       var result = {};
-      adList.forEach(function (ad) {
+      var tempList = adList.slice();
+      tempList.forEach(function (ad) {
         if (ad.location.x === coords.x && ad.location.y === coords.y) {
           result = ad;
         }
@@ -205,67 +205,8 @@ window.data = (function () {
      * @return {Array<Object>}
      */
     getAdList: function () {
-      return adList;
-    },
-
-    /* -------------------------------------------------------------------------
-     * Get information of selected filters and returns result for showing pins
-     * @param {Array<Object>} - selected options list
-     * @param {Array<string>} - names of checked features
-     * @return {Array<boolean>}
-     */
-    filterProcess: function (selects, checkboxes) {
-      var filterResult = [];
-
-      function isOff(feature) {
-        return feature === false;
-      }
-
-      function priceToString(price) {
-        switch (true) {
-          case price < 10000:
-            return 'low';
-          case price < 50000:
-            return 'middle';
-          default:
-            return 'high';
-        }
-      }
-
-      adList.forEach(function (ad) {
-        var allOptionsIsAny = Object.keys(selects).length === 0;
-        var allCheckboxesUncheked = checkboxes.every(isOff);
-
-        if (allOptionsIsAny && allCheckboxesUncheked) {
-          filterResult.push(true);
-        } else {
-          var isSelectsPass = true;
-          var adOptions = [];
-          adOptions['housing_type'] = ad.offer.type;
-          adOptions['housing_price'] = priceToString(ad.offer.price);
-          adOptions['housing_room-number'] = ad.offer.rooms.toString();
-          adOptions['housing_guests-number'] = ad.offer.guests.toString();
-
-          for (var property in selects) {
-            if (adOptions[property] !== selects[property]) {
-              isSelectsPass = false;
-            }
-          }
-
-          var isCheckboxesPass = true;
-          var adFeatures = ad.offer.features.slice();
-
-          checkboxes.forEach(function (feature) {
-            if (!adFeatures.includes(feature)) {
-              isCheckboxesPass = false;
-            }
-          });
-
-          filterResult.push(isSelectsPass && isCheckboxesPass);
-        }
-      });
-
-      return filterResult;
+      var tempList = adList.slice();
+      return tempList;
     }
 
   };

@@ -1,7 +1,5 @@
 /* Works with map */
 
-/* global drag, card */
-
 'use strict';
 
 window.map = (function () {
@@ -22,8 +20,8 @@ window.map = (function () {
      */
     init: function () {
       var mainPin = document.querySelector('.pin__main');
-      card.hideCard();
-      drag.makeDraggable(mainPin);
+      window.card.hideCard();
+      window.drag.makeDraggable(mainPin);
     },
 
     /* -------------------------------------------------------------------------
