@@ -1,7 +1,5 @@
 /* Draws a pin */
 
-/* global subscribes, data, card */
-
 'use strict';
 
 window.pin = (function () {
@@ -20,7 +18,7 @@ window.pin = (function () {
     pinNode.style.left = ad.location.x + 'px';
     pinNode.style.top = ad.location.y + 'px';
     pinNode.setAttribute('tabindex', 0);
-    subscribes.toDialogOpenHandler(pinNode);
+    window.cardBehavior.subscribeToOpenCard(pinNode);
 
     var pinAvatar = document.createElement('img');
     pinAvatar.src = ad.author.avatar;
@@ -59,7 +57,7 @@ window.pin = (function () {
      * Draws the pins of all ads
      */
     draw: function () {
-      var ads = data.getAdList();
+      var ads = window.data.getAdList();
       var fragment = getPinsFragment(ads);
       var map = document.querySelector('.tokyo__pin-map');
       map.appendChild(fragment);
@@ -97,7 +95,8 @@ window.pin = (function () {
           pinList[i].classList.remove('hidden');
         }
       }
-      card.hideCard();
+      window.card.hideCard();
+      window.pin.deactivateAll();
     }
 
   };

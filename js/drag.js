@@ -1,7 +1,5 @@
 /* Drag and drop controller */
 
-/* global map */
-
 'use strict';
 
 window.drag = (function () {
@@ -56,7 +54,7 @@ window.drag = (function () {
     };
 
     /* Prevent pin leaves the map */
-    map.correctPosition(newCoords);
+    window.map.correctPosition(newCoords);
 
     /* Apply coordinates to the pin */
     drag.pin.style.left = newCoords.x + 'px';

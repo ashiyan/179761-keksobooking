@@ -1,7 +1,5 @@
 /* Draws elements on the card */
 
-/* global data */
-
 'use strict';
 
 window.card = (function () {
@@ -23,6 +21,24 @@ window.card = (function () {
   }
 
   /* ---------------------------------------------------------------------------
+   * Creates and returns a DOM-fragment with lodge photos
+   * @param {Object} - ad object
+   * @return {DocumentFragment}
+   */
+  function createPhotosNode(adObject) {
+    var fragment = document.createDocumentFragment();
+    adObject.offer.photos.forEach(function (photo) {
+      var node = document.createElement('img');
+      node.src = photo;
+      node.alt = 'Lodge photo';
+      node.width = '52';
+      node.height= "42";
+      fragment.appendChild(node);
+    });
+    return fragment;
+  }
+
+  /* ---------------------------------------------------------------------------
    * Creates and returns a DOM fragment of the ad card
    * @param {Object} - ad object
    * @return {HTMLElement}
@@ -38,9 +54,11 @@ window.card = (function () {
       time: template.querySelector('.lodge__checkin-time'),
       features: template.querySelector('.lodge__features'),
       description: template.querySelector('.lodge__description'),
+      photos: template.querySelector('.lodge__photos'),
       avatar: document.getElementById('offer-dialog').getElementsByTagName('img')[0]
     };
     var featuresList = createFeaturesNode(adObject);
+    var photosList = createPhotosNode(adObject);
 
     var rusType = {
       'flat': 'Квартира',
@@ -56,7 +74,10 @@ window.card = (function () {
       ' гостей в ' + adObject.offer.rooms + ' комнатах';
     tempElements.time.textContent = 'Заезд после ' + adObject.offer.checkin +
       ', выезд до ' + adObject.offer.checkout;
+
     tempElements.features.appendChild(featuresList);
+    tempElements.photos.appendChild(photosList);
+
     tempElements.description.textContent = adObject.offer.description;
     tempElements.avatar.src = adObject.author.avatar;
 
@@ -72,7 +93,7 @@ window.card = (function () {
      * @param {Object} - object with pin coords
      */
     showCard: function (pinLocation) {
-      var adObject = data.getAdByLocation(pinLocation);
+      var adObject = window.data.getAdByLocation(pinLocation);
       var newCard = getCard(adObject);
 
       var oldCard = document.querySelector('.dialog__panel');

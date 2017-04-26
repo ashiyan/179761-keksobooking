@@ -1,11 +1,8 @@
 /* Initializes other modules */
 
-/* global app, data, subscribes, map, publishForm */
-
 'use strict';
 
 window.app = (function () {
-
 
 /* * * * * * * * * * * * * * * R E T U R N * * * * * * * * * * * * * * * * * */
 
@@ -15,14 +12,15 @@ window.app = (function () {
      * Initializes application modules
      */
     init: function () {
-      data.init();
-      subscribes.init();
-      map.init();
-      publishForm.init();
+      window.data.init();
+      window.cardBehavior.init();
+      window.publishForm.init();
+      window.filtration.init();
+      window.map.init();
     }
   };
 
 })();
 
 /* Starting initialization */
-app.init();
+window.app.init();

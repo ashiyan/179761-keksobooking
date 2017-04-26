@@ -411,7 +411,13 @@ select option:hover {
     border-radius: 4px;
     border: 4px transparent;
 
+    text-align: center;
+
     background: #dadad4;
+}
+
+.form__photo img {
+    vertical-align: middle;
 }
 
 .form__submit {
