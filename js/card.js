@@ -31,8 +31,8 @@ window.card = (function () {
       var node = document.createElement('img');
       node.src = photo;
       node.alt = 'Lodge photo';
-      node.width = '52';
       node.height = '42';
+      node.width = '52';
       fragment.appendChild(node);
     });
     return fragment;
