@@ -32,7 +32,7 @@ window.card = (function () {
       node.src = photo;
       node.alt = 'Lodge photo';
       node.width = '52';
-      node.height= "42";
+      node.height = '42';
       fragment.appendChild(node);
     });
     return fragment;
