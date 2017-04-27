@@ -1,4 +1,4 @@
-/* Loads and displays user's avatar */
+/* Loads avatar and lodge photos */
 
 'use strict';
 
