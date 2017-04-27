@@ -2,7 +2,7 @@
 
 'use strict';
 
-window.publishForm = (function () {
+window.form = (function () {
 
   /* ---------------------------------------------------------------------------
    * Handler synchronizing the timein and timeout fields

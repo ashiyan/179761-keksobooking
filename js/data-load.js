@@ -9,7 +9,7 @@
    * @param {string} - URL address for data requesting
    * @param {function} - callback function of information processing
    */
-  window.load = function (url, onLoad) {
+  window.dataLoad = function (url, onLoad) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.send();

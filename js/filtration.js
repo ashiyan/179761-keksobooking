@@ -12,7 +12,7 @@ window.filtration = (function () {
    */
   function filterProcess(selects, checkboxes) {
     var filterResult = [];
-    var adList = window.data.getAdList();
+    var adList = window.dataCreation.getAdList();
 
     function isOff(feature) {
       return feature === false;
