@@ -74,7 +74,7 @@ window.form = (function () {
    */
   function priceChangeHandler(event) {
     var price = event.target;
-    price.style.borderColor = price.checkValidity() ? '#d9d9d3' : '#f00';
+    price.style.borderColor = price.checkValidity() ? window.constants.colors.GRAY_INPUT : window.constants.colors.RED_INPUT;
   }
 
   /* ---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ window.form = (function () {
     } else {
       title.setCustomValidity('');
     }
-    title.style.borderColor = title.checkValidity() ? '#d9d9d3' : '#f00';
+    title.style.borderColor = title.checkValidity() ? window.constants.colors.GRAY_INPUT : window.constants.colors.RED_INPUT;
   }
 
   /* -------------------------------------------------------------------------

@@ -10,39 +10,8 @@
 
   window.popup = function (parentNode, messageText) {
     var message = document.createElement('div');
-    var popupStyle = message.style;
-
-    /* Content and class */
     message.innerHTML = messageText;
     message.className = 'popup';
-
-    /* Positioning and dimensions */
-    popupStyle.position = 'absolute';
-    popupStyle.top = '25px';
-    popupStyle.left = '25px';
-    popupStyle.maxWidth = '350px';
-    popupStyle.minWidth = '150px';
-    popupStyle.height = 'auto';
-    popupStyle.zIndex = '999';
-
-    /* Behavior */
-    popupStyle.opacity = '0';
-    popupStyle.transition = 'opacity 300ms linear';
-    popupStyle.userSelect = 'none';
-    popupStyle.cursor = 'default';
-
-    /* Indents */
-    popupStyle.padding = '10px';
-
-    /* Border */
-    popupStyle.borderLeft = '5px solid #ff6d51';
-
-    /* Colors */
-    popupStyle.background = '#fff';
-
-    /* Text */
-    popupStyle.fontWeight = 'bold';
-    popupStyle.fontSize = '12px';
 
     /* Inserting an element into the markup */
     parentNode.appendChild(message);
