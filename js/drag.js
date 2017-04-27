@@ -11,6 +11,8 @@ window.drag = (function () {
    * @param {Object} - event object
    */
   function startDrag(event) {
+    event.preventDefault();
+
     /* Cancel event by pressing the middle or right mouse button */
     var pressed = {
       mouseMiddle: event.button === 1,

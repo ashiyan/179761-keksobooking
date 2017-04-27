@@ -665,3 +665,22 @@ select option:hover {
 .hidden {
     display:  none;
 }
+
+.popup {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    max-width: 350px;
+    min-width: 150px;
+    height: auto;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 300ms linear;
+    user-select: none;
+    cursor: default;
+    padding: 10px;
+    border-left: 5px solid #ff6d51;
+    background: #fff;
+    font-weight: bold;
+    font-size: 12px;
+}

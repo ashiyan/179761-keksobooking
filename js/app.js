@@ -12,9 +12,9 @@ window.app = (function () {
      * Initializes application modules
      */
     init: function () {
-      window.data.init();
+      window.dataCreation.init();
       window.cardBehavior.init();
-      window.publishForm.init();
+      window.form.init();
       window.filtration.init();
       window.map.init();
     }

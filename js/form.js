@@ -2,7 +2,7 @@
 
 'use strict';
 
-window.publishForm = (function () {
+window.form = (function () {
 
   /* ---------------------------------------------------------------------------
    * Handler synchronizing the timein and timeout fields
@@ -15,7 +15,12 @@ window.publishForm = (function () {
     var timeoutDropDown = document.querySelector('#timeout');
 
     function syncValues(field, value) {
-      field.value = value;
+      for (var i = 0; i < field.options.length; i++) {
+        if (field.options[i].text === value) {
+          field.options[i].selected = true;
+          return;
+        }
+      }
     }
 
     window.synchronizeFields(timeinDropDown, timeoutDropDown,
@@ -52,7 +57,12 @@ window.publishForm = (function () {
     var guestsDropDown = document.querySelector('#capacity');
 
     function syncValues(field, value) {
-      field.value = value;
+      for (var i = 0; i < field.options.length; i++) {
+        if (field.options[i].text === value) {
+          field.options[i].selected = true;
+          return;
+        }
+      }
     }
 
     window.synchronizeFields(roomsDropDown, guestsDropDown,
@@ -62,9 +72,30 @@ window.publishForm = (function () {
   /* ---------------------------------------------------------------------------
    * Paints the field's border depending on the validity
    */
-  function borderColorChangeHandler(event) {
-    var element = event.target;
-    element.style.borderColor = element.checkValidity() ? '#d9d9d3' : '#f00';
+  function priceChangeHandler(event) {
+    var price = event.target;
+    price.style.borderColor = price.checkValidity() ? window.constants.colors.GRAY_INPUT : window.constants.colors.RED_INPUT;
+  }
+
+  /* ---------------------------------------------------------------------------
+   * Checks length of title
+   */
+  function titleChangeHandler(event) {
+    var title = event.target;
+    var length = title.value.length;
+    /* If length of title not in range - it's error */
+    if (length < 30 || length > 100) {
+      title.setCustomValidity('Длина заголовка должна быть не меньше 30 и не больше 100 символов.');
+      if (!HTMLFormElement.prototype.reportValidity) {
+        HTMLFormElement.prototype.reportValidity = function () {
+          var form = document.querySelector('.notice__form');
+          form.submit();
+        };
+      }
+    } else {
+      title.setCustomValidity('');
+    }
+    title.style.borderColor = title.checkValidity() ? window.constants.colors.GRAY_INPUT : window.constants.colors.RED_INPUT;
   }
 
   /* -------------------------------------------------------------------------
@@ -107,9 +138,6 @@ window.publishForm = (function () {
      * Initializes start settings for fields
      */
     init: function () {
-      var submit = document.querySelector('.form__submit');
-      submit.addEventListener('click', borderColorChangeHandler);
-
       var type = document.querySelector('#type');
       type.addEventListener('change', typeChangeHandler);
 
@@ -120,11 +148,11 @@ window.publishForm = (function () {
       rooms.addEventListener('change', roomsChangeHandler);
 
       var title = document.querySelector('#title');
-      title.addEventListener('input', borderColorChangeHandler);
+      title.addEventListener('input', titleChangeHandler);
 
       var price = document.querySelector('#price');
       price.min = 1000;
-      price.addEventListener('input', borderColorChangeHandler);
+      price.addEventListener('input', priceChangeHandler);
 
       var address = document.querySelector('#address');
       address.addEventListener('input', addressChangeHandler);

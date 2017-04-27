@@ -57,7 +57,7 @@ window.pin = (function () {
      * Draws the pins of all ads
      */
     draw: function () {
-      var ads = window.data.getAdList();
+      var ads = window.dataCreation.getAdList();
       var fragment = getPinsFragment(ads);
       var map = document.querySelector('.tokyo__pin-map');
       map.appendChild(fragment);

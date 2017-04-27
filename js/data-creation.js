@@ -2,7 +2,7 @@
 
 'use strict';
 
-window.data = (function () {
+window.dataCreation = (function () {
 
   var adList = [];
 
@@ -171,7 +171,7 @@ window.data = (function () {
      */
     init: function () {
       var requestUrl = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
-      window.load(requestUrl, getAnswerHandler);
+      window.dataLoad(requestUrl, getAnswerHandler);
     },
 
     /* -------------------------------------------------------------------------

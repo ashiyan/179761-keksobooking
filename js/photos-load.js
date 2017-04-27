@@ -1,4 +1,4 @@
-/* Loads and displays user's avatar */
+/* Loads avatar and lodge photos */
 
 'use strict';
 
@@ -86,8 +86,8 @@
    */
   function dropzoneSetColorHandler(event) {
     var elementStyle = event.currentTarget.style;
-    elementStyle.borderColor = '#ff6547';
-    elementStyle.color = '#ff6547';
+    elementStyle.borderColor = window.constants.colors.ORANGE_LOADER;
+    elementStyle.color = window.constants.colors.ORANGE_LOADER;
   }
 
     /* -------------------------------------------------------------------------
@@ -96,8 +96,8 @@
    */
   function dropzoneResetColorHandler(event) {
     var elementStyle = event.currentTarget.style;
-    elementStyle.borderColor = '#b3b3ad';
-    elementStyle.color = '#cdcdc7';
+    elementStyle.borderColor = window.constants.colors.GRAY_LOADER;
+    elementStyle.color = window.constants.colors.GRAY_LOADER;
   }
 
 })();

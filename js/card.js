@@ -93,7 +93,7 @@ window.card = (function () {
      * @param {Object} - object with pin coords
      */
     showCard: function (pinLocation) {
-      var adObject = window.data.getAdByLocation(pinLocation);
+      var adObject = window.dataCreation.getAdByLocation(pinLocation);
       var newCard = getCard(adObject);
 
       var oldCard = document.querySelector('.dialog__panel');
