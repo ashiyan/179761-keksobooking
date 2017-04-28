@@ -23,8 +23,11 @@ window.form = (function () {
       }
     }
 
-    window.synchronizeFields(timeinDropDown, timeoutDropDown,
-        timein, timeout, syncValues);
+    if (event.target === timeinDropDown) {
+      window.synchronizeFields(timeinDropDown, timeoutDropDown, timein, timeout, syncValues);
+    } else {
+      window.synchronizeFields(timeoutDropDown, timeinDropDown, timeout, timein, syncValues);
+    }
   }
 
   /* ---------------------------------------------------------------------------
@@ -142,7 +145,9 @@ window.form = (function () {
       type.addEventListener('change', typeChangeHandler);
 
       var timein = document.querySelector('#time');
+      var timeout = document.querySelector('#timeout');
       timein.addEventListener('change', timeChangeHandler);
+      timeout.addEventListener('change', timeChangeHandler);
 
       var rooms = document.querySelector('#room_number');
       rooms.addEventListener('change', roomsChangeHandler);

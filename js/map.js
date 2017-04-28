@@ -4,6 +4,7 @@
 
 window.map = (function () {
 
+  var mainPin = document.querySelector('.pin__main');
   var border = {
     top: 100,
     right: 900,
@@ -19,7 +20,6 @@ window.map = (function () {
      * Initializes start map's settings
      */
     init: function () {
-      var mainPin = document.querySelector('.pin__main');
       window.card.hideCard();
       window.drag.makeDraggable(mainPin);
     },
@@ -38,7 +38,6 @@ window.map = (function () {
      * @param {number} - y coord
      */
     setMainPinPosition: function (x, y) {
-      var mainPin = document.querySelector('.pin__main');
       mainPin.style.left = x + 'px';
       mainPin.style.top = y + 'px';
     },

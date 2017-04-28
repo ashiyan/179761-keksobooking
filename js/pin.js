@@ -5,6 +5,7 @@
 window.pin = (function () {
 
   var pinList = [];
+  var tokyoMap = document.querySelector('.tokyo__pin-map');
 
   /* ---------------------------------------------------------------------------
    * Creates and returns a pin node
@@ -14,7 +15,7 @@ window.pin = (function () {
   function createPinNode(ad) {
     var pinNode = document.createElement('div');
 
-    pinNode.className = 'pin pin__other';
+    pinNode.className = 'pin hidden';
     pinNode.style.left = ad.location.x + 'px';
     pinNode.style.top = ad.location.y + 'px';
     pinNode.setAttribute('tabindex', 0);
@@ -35,7 +36,7 @@ window.pin = (function () {
 
   /* ---------------------------------------------------------------------------
    * Creates and returns a DOM fragment consisting of pins
-   * @param {Array<Object>} - array with ad's objects
+   * @param {indexesay<Object>} - indexesay with ad's objects
    * @return {DocumentFragment}
    */
   function getPinsFragment(adList) {
@@ -59,8 +60,20 @@ window.pin = (function () {
     draw: function () {
       var ads = window.dataCreation.getAdList();
       var fragment = getPinsFragment(ads);
-      var map = document.querySelector('.tokyo__pin-map');
-      map.appendChild(fragment);
+      var indexes = [];
+
+      tokyoMap.appendChild(fragment);
+
+      while (indexes.length < 3) {
+        var number = Math.ceil(Math.random() * (ads.length - 1));
+        if (indexes.indexOf(number) < 0) {
+          indexes.push(number);
+        }
+      }
+
+      indexes.forEach(function (index) {
+        pinList[index].classList.remove('hidden');
+      });
     },
 
     /* -------------------------------------------------------------------------
@@ -74,20 +87,19 @@ window.pin = (function () {
     /* -------------------------------------------------------------------------
      * Removes selection from all active pins
      */
-    deactivateAll: function () {
-      var map = document.querySelector('.tokyo__pin-map');
-      var activePins = map.querySelectorAll('.pin--active');
-      [].forEach.call(activePins, function (pin) {
-        pin.classList.remove('pin--active');
-      });
+    deactivate: function () {
+      var activePin = tokyoMap.querySelector('.pin--active');
+      if (activePin !== null) {
+        activePin.classList.remove('pin--active');
+      }
     },
 
     /* -------------------------------------------------------------------------
      * Apply filter to pins
-     * @param {Array<boolean>} - show/hide conditions
+     * @param {indexesay<boolean>} - show/hide conditions
      */
     applyFilter: function (isShow) {
-      [].forEach.call(pinList, function (pin) {
+      pinList.forEach(function (pin) {
         pin.classList.add('hidden');
       });
       for (var i = 0; i < pinList.length; i++) {
@@ -96,7 +108,7 @@ window.pin = (function () {
         }
       }
       window.card.hideCard();
-      window.pin.deactivateAll();
+      window.pin.deactivate();
     }
 
   };

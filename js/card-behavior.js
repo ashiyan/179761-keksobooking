@@ -20,7 +20,7 @@ window.cardBehavior = (function () {
     };
 
     if (pressed.mouseLeft || pressed.enter) {
-      window.pin.deactivateAll();
+      window.pin.deactivate();
       window.pin.activate(clickedPin);
       window.card.showCard(location);
     }
@@ -38,7 +38,7 @@ window.cardBehavior = (function () {
     };
 
     if (pressed.mouseLeft || pressed.enter || pressed.escape) {
-      window.pin.deactivateAll();
+      window.pin.deactivate();
       window.card.hideCard();
     }
   }

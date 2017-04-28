@@ -180,8 +180,7 @@ window.dataCreation = (function () {
      * @return {Object}
      */
     getAd: function (index) {
-      var tempList = adList.slice();
-      return tempList[index];
+      return adList[index];
     },
 
     /* -------------------------------------------------------------------------
@@ -191,8 +190,7 @@ window.dataCreation = (function () {
      */
     getAdByLocation: function (coords) {
       var result = {};
-      var tempList = adList.slice();
-      tempList.forEach(function (ad) {
+      adList.forEach(function (ad) {
         if (ad.location.x === coords.x && ad.location.y === coords.y) {
           result = ad;
         }
@@ -205,8 +203,7 @@ window.dataCreation = (function () {
      * @return {Array<Object>}
      */
     getAdList: function () {
-      var tempList = adList.slice();
-      return tempList;
+      return adList;
     }
 
   };
